@@ -9,7 +9,7 @@ public class ProjetoPesquisa {
 	private String dataDeInicio;
 	private String dataDeFim;
 	private String professorResponsavel;
-	private List<Pesquisador> equipe = new ArrayList<Pesquisador>();
+	private List<Pesquisador> equipe;
 
 	// Construtores
 	public ProjetoPesquisa() {
@@ -20,16 +20,16 @@ public class ProjetoPesquisa {
 		this.titulo = titulo;
 		this.dataDeInicio = dataDeInicio;
 		this.dataDeFim = dataDeFim;
-		this.equipe = equipe;
+		this.equipe = new ArrayList<Pesquisador>(equipe);
 		this.professorResponsavel = selecionarProfessor();
 	}
 
 	// Métodos
 	public String selecionarProfessor() {
 		String nome = null;
-		for (int i = 0; i < equipe.size(); i++) {
-			if (equipe.get(i).getTipo() == "Professor") {
-				nome = equipe.get(i).getNome();
+		for (int i = 0; i < this.equipe.size(); i++) {
+			if (this.equipe.get(i).getTipo() == "Professor") {
+				nome = this.equipe.get(i).getNome();
 				break;
 			}
 		}
@@ -37,30 +37,15 @@ public class ProjetoPesquisa {
 	}
 
 	public void adicionarProfessor(Professor professor) {
-		equipe.add(professor);
+		this.equipe.add(professor);
 	}
 
 	public void adicionarAluno(Aluno aluno) {
-		equipe.add(aluno);
-	}
-
-	public boolean verificarPessoa(String nome) {
-
-		boolean cadastrado = false;
-
-		for (int i = 0; i < equipe.size(); i++) {
-			if (equipe.get(i).getNome() == nome) {
-				System.out.println("Usuário já cadastrado");
-				cadastrado = true;
-				break;
-			}
-		}
-
-		return cadastrado;
+		this.equipe.add(aluno);
 	}
 
 	public void mostrarEquipe() {
-		for (Pesquisador x : equipe) {
+		for (Pesquisador x : this.equipe) {
 			System.out.println("Nome: " + x.getNome() + "	|Tipo: " + x.getTipo());
 		}
 	}
