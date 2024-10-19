@@ -21,6 +21,14 @@ public class ProjetoPesquisa {
 		this.dataDeInicio = dataDeInicio;
 		this.dataDeFim = dataDeFim;
 		this.equipe = new ArrayList<Pesquisador>(equipe);
+
+		// Instancia de um novo ArrayList do tipo <Pesquisador> passando como parametro
+		// a EQUIPE que vem do main, isso garante que não haja referenciamento entre as
+		// equipes de varios PROJETOS, pois assim cada ProjetoPesquisa terá seu próprio
+		// objeto equipe,
+		// sendo assim não apartir deste momento não a mais o MESMO REFERENCIAMENTO
+		// entre as listas
+
 		this.professorResponsavel = selecionarProfessor();
 	}
 

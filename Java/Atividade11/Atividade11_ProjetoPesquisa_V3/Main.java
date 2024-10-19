@@ -9,19 +9,12 @@ public class Main {
 		Scanner sc = new Scanner(System.in);
 		List<ProjetoPesquisa> ProjetoPesquisa = new ArrayList<ProjetoPesquisa>();
 		List<Pesquisador> equipe = new ArrayList<Pesquisador>();
+
+		// variaveis utilizadas
 		boolean SistemaOnline = true;
 		int id = 0;
 		int opcao = 0;
 		int idPesquisa;
-
-		// equipe.add(new Professor("Eder", 1000));
-		// equipe.add(new Aluno("Alan"));
-		// equipe.add(new Aluno("Pedrita"));
-
-		// ProjetoPesquisa.add(new ProjetoPesquisa(01, "Teste", "16/10/2024",
-		// "16/10/2025", equipe));
-
-		// System.out.println(equipe.get(0).getTipo());
 
 		do {
 			System.out.println("+-----------------------------+");
@@ -35,6 +28,7 @@ public class Main {
 			System.out.println("+-----------------------------+");
 			System.out.print(">> ");
 
+			// verificação de segurança para a criação do 1° projeto
 			if (id <= 0 && opcao != 1) {
 				do {
 					System.out.println("Crie seu 1° projeto.");
@@ -50,6 +44,8 @@ public class Main {
 			System.out.println();
 
 			switch (opcao) {
+
+			// criação de projeto
 			case 1:
 				++id;
 				System.out.print("Título: ");
@@ -86,6 +82,10 @@ public class Main {
 
 				ProjetoPesquisa.add(new ProjetoPesquisa(id, titulo, dataInicio, dataFim, equipe));
 				equipe.clear();
+
+				// Limpeza da equipe (equipe.clear()) , isso garante de que nenhum outro objeto
+				// ALUNO ou PROFESSOR seja referenciado em outro ProjetoPesquisa.
+
 				break;
 
 			case 2:
@@ -116,6 +116,7 @@ public class Main {
 				break;
 
 			case 4:
+				//Mostrando todos os projetos cadastrados
 				for (ProjetoPesquisa x : ProjetoPesquisa) {
 					System.out.print("Código: " + x.getCodigo() + "	|Título: " + x.getTitulo());
 					System.out.println();
@@ -128,6 +129,7 @@ public class Main {
 
 				System.out.println();
 
+				//Exibindo informações do projeto selecionado
 				System.out.println("Código: " + ProjetoPesquisa.get(idPesquisa).getCodigo());
 				System.out.println("Título: " + ProjetoPesquisa.get(idPesquisa).getTitulo());
 				System.out.println("Data de início: " + ProjetoPesquisa.get(idPesquisa).getDataDeInicio());
