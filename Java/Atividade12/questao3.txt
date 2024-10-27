@@ -1,0 +1,11 @@
+
+
+quest 3: 
+
+Manutenção;
+ Facilidade na manutenção dos códigos.
+Legibilidade;
+ Facilita a leitura posterior do código.
+Reusabilidade.
+ Cria-se a possibilidade de reuso dos códigos.
+
