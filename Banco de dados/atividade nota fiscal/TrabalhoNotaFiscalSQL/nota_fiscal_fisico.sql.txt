@@ -1,0 +1,184 @@
+/* nota_fiscal_logico: */
+
+-- CREATE DATABASE modelo_nota_fiscal;
+
+CREATE TABLE destinatario_remetente (
+    cpnj_cpf VARCHAR PRIMARY KEY,
+    nome VARCHAR,
+    IE VARCHAR,
+    telefone VARCHAR,
+    cep VARCHAR,
+    logradouro VARCHAR,
+    numero VARCHAR,
+    UF CHAR(2),
+    municipio VARCHAR,
+    bairro VARCHAR,
+    IE_substituicaoTributaria VARCHAR
+);
+
+CREATE TABLE fatura (
+    numero serial PRIMARY KEY,
+    vencimento TIMESTAMP,
+    valor DECIMAL(10,2),
+    fk_Danfe_chave_acesso serial
+);
+
+CREATE TABLE Danfe (
+    chave_acesso serial PRIMARY KEY,
+    numero INTEGER,
+    serie INTEGER,
+    dataEmissao TIMESTAMP,
+    dataSaida TIMESTAMP,
+    valorSeguro DECIMAL(10,2),
+    desconto DECIMAL(10,2),
+    despesasAcessorias VARCHAR,
+    totalNota DECIMAL(10,2),
+    observacoes VARCHAR,
+    valorFrete DECIMAL(10,2),
+    IM VARCHAR,
+    valorISSQN DECIMAL(10,2),
+    fk_naturezaDeOperacao_id serial,
+    fk_tipoNota_id serial,
+    fk_Transportadora_cnpj_cpf VARCHAR
+);
+
+CREATE TABLE Transportadora (
+    cnpj_cpf VARCHAR PRIMARY KEY,
+    nome VARCHAR,
+    UF CHAR(2),
+    logradouro VARCHAR,
+    bairro VARCHAR,
+    municipio VARCHAR,
+    cep VARCHAR,
+    numero VARCHAR
+);
+
+CREATE TABLE item (
+    codigo VARCHAR PRIMARY KEY,
+    descricao VARCHAR,
+    quantidade INTEGER,
+    preco DECIMAL(10,2),
+    icms DECIMAL(10,2),
+    ipi DECIMAL(10,2),
+    fk_CST_id serial,
+    fk_NCMSH_id serial,
+    fk_Danfe_chave_acesso serial,
+    fk_unidadeMedida_id serial
+);
+
+CREATE TABLE naturezaDeOperacao (
+    id serial PRIMARY KEY,
+    nome VARCHAR
+);
+
+CREATE TABLE tipoNota (
+    id serial PRIMARY KEY,
+    nome VARCHAR
+);
+
+CREATE TABLE Transporte (
+    placaVeiculo VARCHAR,
+    codigoANTT VARCHAR,
+    quantidade INTEGER,
+    marca VARCHAR,
+    numeracao VARCHAR,
+    pesoLiquido DECIMAL(10,2),
+    pesoBruto DECIMAL(10,2),
+    id serial PRIMARY KEY,
+    fk_Transportadora_cnpj_cpf VARCHAR,
+    fk_unidadeMedida_id serial,
+    fk_frete_por_conta_id serial
+);
+
+CREATE TABLE unidadeMedida (
+    id serial PRIMARY KEY,
+    nome VARCHAR
+);
+
+CREATE TABLE CST (
+    id serial PRIMARY KEY,
+    nome VARCHAR
+);
+
+CREATE TABLE NCMSH (
+    id serial PRIMARY KEY,
+    nome VARCHAR
+);
+
+CREATE TABLE frete_por_conta (
+    id serial PRIMARY KEY,
+    nome VARCHAR
+);
+
+CREATE TABLE Relacionamento_3 (
+    fk_Danfe_chave_acesso serial,
+    fk_destinatario_remetente_cpnj_cpf VARCHAR,
+    isDestinatario BOOLEAN
+);
+ 
+ALTER TABLE fatura ADD CONSTRAINT FK_fatura_2
+    FOREIGN KEY (fk_Danfe_chave_acesso)
+    REFERENCES Danfe (chave_acesso)
+    ON DELETE RESTRICT;
+ 
+ALTER TABLE Danfe ADD CONSTRAINT FK_Danfe_2
+    FOREIGN KEY (fk_naturezaDeOperacao_id)
+    REFERENCES naturezaDeOperacao (id)
+    ON DELETE CASCADE;
+ 
+ALTER TABLE Danfe ADD CONSTRAINT FK_Danfe_3
+    FOREIGN KEY (fk_tipoNota_id)
+    REFERENCES tipoNota (id)
+    ON DELETE CASCADE;
+ 
+ALTER TABLE Danfe ADD CONSTRAINT FK_Danfe_4
+    FOREIGN KEY (fk_Transportadora_cnpj_cpf)
+    REFERENCES Transportadora (cnpj_cpf)
+    ON DELETE CASCADE;
+ 
+ALTER TABLE item ADD CONSTRAINT FK_item_2
+    FOREIGN KEY (fk_CST_id)
+    REFERENCES CST (id)
+    ON DELETE CASCADE;
+ 
+ALTER TABLE item ADD CONSTRAINT FK_item_3
+    FOREIGN KEY (fk_NCMSH_id)
+    REFERENCES NCMSH (id)
+    ON DELETE CASCADE;
+ 
+ALTER TABLE item ADD CONSTRAINT FK_item_4
+    FOREIGN KEY (fk_Danfe_chave_acesso)
+    REFERENCES Danfe (chave_acesso)
+    ON DELETE RESTRICT;
+ 
+ALTER TABLE item ADD CONSTRAINT FK_item_5
+    FOREIGN KEY (fk_unidadeMedida_id)
+    REFERENCES unidadeMedida (id)
+    ON DELETE CASCADE;
+ 
+ALTER TABLE Transporte ADD CONSTRAINT FK_Transporte_2
+    FOREIGN KEY (fk_Transportadora_cnpj_cpf)
+    REFERENCES Transportadora (cnpj_cpf)
+    ON DELETE CASCADE;
+ 
+ALTER TABLE Transporte ADD CONSTRAINT FK_Transporte_3
+    FOREIGN KEY (fk_unidadeMedida_id)
+    REFERENCES unidadeMedida (id)
+    ON DELETE CASCADE;
+ 
+ALTER TABLE Transporte ADD CONSTRAINT FK_Transporte_4
+    FOREIGN KEY (fk_frete_por_conta_id)
+    REFERENCES frete_por_conta (id)
+    ON DELETE CASCADE;
+ 
+ALTER TABLE Relacionamento_3 ADD CONSTRAINT FK_Relacionamento_3_1
+    FOREIGN KEY (fk_Danfe_chave_acesso)
+    REFERENCES Danfe (chave_acesso)
+    ON DELETE RESTRICT;
+ 
+ALTER TABLE Relacionamento_3 ADD CONSTRAINT FK_Relacionamento_3_2
+    FOREIGN KEY (fk_destinatario_remetente_cpnj_cpf)
+    REFERENCES destinatario_remetente (cpnj_cpf)
+    ON DELETE RESTRICT;
+
+ALTER TABLE Relacionamento_3 RENAME TO danfe_destinatario;
